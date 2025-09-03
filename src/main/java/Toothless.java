@@ -40,7 +40,7 @@ public class Toothless {
         }else if(mark.equals("todo")){
             ToDo.toDoString(reply);
         }else if(!mark.isEmpty()){
-            Task.addList(reply);
+            Task.addList(reply,"add");
         }else{
             System.out.println("You have entered a wrong entry or command \n");
         }

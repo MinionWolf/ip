@@ -32,13 +32,24 @@ public class Task {
     }
 
     //add task to list
-    public static void addList(String reply){
-        System.out.println("--------------------------------\n" +
-                "added: " + reply + "\n" +
-                "--------------------------------\n");
-        Task t = new Task(reply);
-        list[listCount] = t;
-        listCount++;
+    public static void addList(String reply, String command){
+        if(command.equals("add")){
+            Task t = new Task(reply);
+            list[listCount] = t;
+            listCount++;
+            System.out.println("--------------------------------\n" +
+                    "added: " + t.getTaskName() +
+                    "\n--------------------------------\n");
+        }
+        else if(command.equals("todo")){
+            ToDo td = new ToDo(reply,true);
+            list[listCount] = td;
+            listCount++;
+            System.out.println("--------------------------------\n" + "Got it. I've added this task: \n" +
+                    "[" + td.getToDoStatus() + "]" + "[" + td.getTaskStatus() + "] " + td.getTaskName() + "\n" +
+                    "Now you have " + td.getListCount() + " tasks in the list. \n" +
+                    "--------------------------------\n");
+        }
     }
 
     //list all task
@@ -46,12 +57,12 @@ public class Task {
         list = Arrays.copyOf(list, listCount);
         System.out.println("-------------------------------- \n" + "Here are the tasks in your list:");
         for(int i = 0; i < list.length; i++){
-            System.out.println(i+1 + ". " + "[" + list[i].getTaskStatus() + "] " + list[i].getTaskName());
+            System.out.println(i+1 + ". " + "[" + ToDo.getToDoStatus() + "] " + "[" + list[i].getTaskStatus() + "] " +  list[i].getTaskName());
         }
         System.out.println("--------------------------------\n");
     }
 
-    //marking/unmarking the task
+    //marking or unmarking the task
     public static void markStatus(String mark, int listIndex){
         if(mark.equals("mark")){
             list[listIndex-1].setTaskStatus(true);

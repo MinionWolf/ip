@@ -1,12 +1,13 @@
 public class ToDo extends Task{
 
-    private boolean toDoStatus;
+    private static boolean toDoStatus;
 
-    public ToDo(String taskName) {
+    public ToDo(String taskName, boolean toDoStatus) {
         super(taskName);
+        this.toDoStatus = toDoStatus;
     }
 
-    public String getToDoStatus() {
+    public static String getToDoStatus() {
         return (toDoStatus ? "T" : " ");
     }
 
@@ -17,15 +18,6 @@ public class ToDo extends Task{
     public static void toDoString(String reply){
         int spaceIndex = reply.indexOf(" ");
         String toDoTask = reply.substring(spaceIndex + 1);
-        System.out.println(toDoTask);
-        addList(toDoTask);
-        System.out.println("Got it. I've added this  task: \n" +
-                "[");
+        addList(toDoTask,"todo");
     }
-
-    @Override
-    public String toString(){
-        return "[" + getToDoStatus() + "]" + super.toString();
-    }
-
 }

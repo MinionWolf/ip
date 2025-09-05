@@ -11,7 +11,7 @@ public class Toothless {
 
     private static String bye = "--------------------------------\n" +
                     "Bye. Hope to see you again soon! \n" +
-                    "--------------------------------\n" ;
+                    "--------------------------------" ;
 
     public static void main(String[] args) {
         System.out.println(logo);
@@ -31,7 +31,7 @@ public class Toothless {
     //checking the CLI command
     public static void checkOperation(String reply){
         int listIndex;
-        String manipulatedString;
+        String taskName;
         String[] tempArray = reply.split(" ");
         String operation = tempArray[0];
 
@@ -44,10 +44,15 @@ public class Toothless {
         }else if(operation.equals("list")){
             getList();
         }else if(operation.equals("todo")){
-            manipulatedString = manipulateString(reply,operation);
-            addList(manipulatedString,operation);
+            taskName = extractTaskName(reply,operation);
+            addToDo(taskName);
         }else if(operation.equals("deadline")){
-
+            taskName = extractTaskName(reply,operation);
+            String by = extractBy(reply);
+            addDeadline(taskName,by);
+        }else if(operation.equals("event")){
+            taskName = extractTaskName(reply,operation);
+            addEvent();
         }
         else{
             System.out.println("You have entered a wrong entry or command \n");
@@ -55,19 +60,28 @@ public class Toothless {
     }
 
     //add task to list
-    public static void addList(String reply, String command){
-        if(command.equals("todo")){
-            ToDo td = new ToDo(reply);
-            list[listCount] = td;
-            listCount++;
-            printTopMessage(command);
-            System.out.println("[" + td.getToDoStatus() + "]" + "[" + td.getMarkStatus() + "] " + td.getTaskName() + "\n" +
-                    "Now you have " + listCount + " tasks in the list. \n");
-        }else{
-            System.out.println("Unable to add to list");
-        }
-
+    public static void addToDo(String taskName){
+        ToDo td = new ToDo(taskName);
+        list[listCount] = td;
+        listCount++;
+        printTopMessage("todo");
+        System.out.println("[" + td.getToDoStatus() + "]" + "[" + td.getMarkStatus() + "] " + td.getTaskName() + "\n" +
+                "Now you have " + listCount + " tasks in the list.");
         printBorder();
+    }
+
+    public static void addDeadline(String taskName, String by){
+        Deadlines d = new Deadlines(taskName, by);
+        list[listCount] = d;
+        listCount++;
+        printTopMessage("deadline");
+        System.out.println("[" + d.getDeadlineStatus() + "]" + "[" + d.getMarkStatus() + "] " + d.getTaskName() + "(by: " + d.getBy() + ") \n" +
+                "Now you have " + listCount + " tasks in the list.");
+        printBorder();
+    }
+
+    public static void addEvent(String taskName, String from, String to){
+
     }
 
     //list all task
@@ -88,43 +102,75 @@ public class Toothless {
         if(mark.equals("mark")){
             list[listIndex-1].setMarkStatus(true);
             printTopMessage("mark");
-            System.out.println("[" + list[listIndex-1].getMarkStatus() + "] " + list[listIndex-1].getTaskName() + "\n");
+            System.out.println("[" + list[listIndex-1].getMarkStatus() + "] " + list[listIndex-1].getTaskName());
         }else{
             list[listIndex-1].setMarkStatus(false);
             printTopMessage("unmark");
-            System.out.println("[" + list[listIndex-1].getMarkStatus() + "] " + list[listIndex-1].getTaskName() + "\n");
+            System.out.println("[" + list[listIndex-1].getMarkStatus() + "] " + list[listIndex-1].getTaskName());
         }
 
         printBorder();
     }
 
+    //print header message
     public static void printTopMessage(String command){
         printBorder();
 
-        if(command.equals("add")){
-            System.out.println("Got it. I've added this task:");
+        if(command.equals("list")){
+            System.out.println("Here are the tasks in your list:");
         }else if(command.equals("mark")){
             System.out.println("Nice! I've marked this task as done:");
         }else if(command.equals("unmark")){
             System.out.println("OK, I've marked this task as not done yet:");
         }else{
-            System.out.println("Here are the tasks in your list:");
+            System.out.println("Got it. I've added this task:");
         }
     }
 
+    //print line border
     public static void printBorder(){
         System.out.println("--------------------------------");
     }
 
-    //manipulate strings
-    public static String manipulateString(String reply,String command){
-        String manipulatedString = "";
+    //get task name
+    public static String extractTaskName(String reply, String command){
+        String taskName = "";
+        int spaceIndex;
 
         if(command.equals("todo")){
-            int spaceIndex = reply.indexOf(" ");
-            manipulatedString = reply.substring(spaceIndex + 1);
+            spaceIndex = reply.indexOf(" ");
+            taskName = reply.substring(spaceIndex + 1);
+        }else if(command.equals("deadline")){
+            spaceIndex = reply.indexOf(" ");
+            int byIndex = reply.indexOf("/by");
+            taskName = reply.substring(spaceIndex + 1,byIndex);
+        }else{
+            spaceIndex = reply.indexOf(" ");
+            int byIndex = reply.indexOf("/from");
+            taskName = reply.substring(spaceIndex + 1,byIndex);
         }
 
-        return manipulatedString;
+        return taskName;
+    }
+
+    //get by
+    public static String extractBy(String reply){
+        int byIndex = reply.indexOf("/by");
+        return reply.substring(byIndex + 3);
+    }
+
+    public static String extractFromTo(String reply, String command){
+        String output;
+
+        int fromIndex = reply.indexOf("/from");
+        int toIndex = reply.indexOf("/to");
+
+        if(command.equals("from")){
+            
+        }else{
+
+        }
+
+        return "";
     }
 }

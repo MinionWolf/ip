@@ -2,7 +2,7 @@ public class Deadlines extends Task{
     private String by;
     private boolean deadlineStatus;
 
-    public Deadlines(String taskName, String by, boolean deadlineStatus) {
+    public Deadlines(String taskName, String by) {
         super(taskName);
         this.by = by;
         this.deadlineStatus = true;

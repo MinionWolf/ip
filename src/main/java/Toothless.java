@@ -5,16 +5,27 @@ public class Toothless {
     private static int listCount = 0;
     private static Task[] list = new Task[100];
 
-    private static String logo = "--------------------------------\n" +
+    private static final String logo = "--------------------------------\n" +
             "Hello I'm Toothless \n" + "What can I do for you? \n" +
+            "-------------------------------- \n";
+
+    private static final String commands =  "Commands List \n" + "--------------------------------\n" +
+            "list - to list all tasks added \n" +
+            "bye - to exit CLI \n" +
+            "mark [num] eg. mark 1 \n" +
+            "unmark [num] eg.unmark 2 \n" +
+            "todo [task name] eg. todo go run \n" +
+            "deadline [task name] /by [deadline date/time] eg. deadline pay loan /by 01/01/25\n" +
+            "event [task name] /from [start date/time] /to [end date/time] eg. attend conference /from Monday 1pm /to Friday 9pm \n" +
             "--------------------------------";
 
-    private static String bye = "--------------------------------\n" +
+    private static final String bye = "--------------------------------\n" +
                     "Bye. Hope to see you again soon! \n" +
                     "--------------------------------" ;
 
     public static void main(String[] args) {
         System.out.println(logo);
+        System.out.println(commands);
 
         Scanner input = new Scanner(System.in);
 
@@ -52,7 +63,9 @@ public class Toothless {
             addDeadline(taskName,by);
         }else if(operation.equals("event")){
             taskName = extractTaskName(reply,operation);
-            addEvent();
+            String from = extractFromTo(reply,"from");
+            String to = extractFromTo(reply,"to");
+            addEvent(taskName,from,to);
         }
         else{
             System.out.println("You have entered a wrong entry or command \n");
@@ -70,6 +83,7 @@ public class Toothless {
         printBorder();
     }
 
+    //add deadline to list
     public static void addDeadline(String taskName, String by){
         Deadlines d = new Deadlines(taskName, by);
         list[listCount] = d;
@@ -80,8 +94,15 @@ public class Toothless {
         printBorder();
     }
 
+    //add event to list
     public static void addEvent(String taskName, String from, String to){
-
+        Events e = new Events(taskName, from, to);
+        list[listCount] = e;
+        listCount++;
+        printTopMessage("event");
+        System.out.println("[" + e.getEventStatus() + "]" + "[" + e.getMarkStatus() + "] " + e.getTaskName() + "(from: " + e.getFrom() + " to: " + e.getTo()  + ") \n" +
+                "Now you have " + listCount + " tasks in the list.");
+        printBorder();
     }
 
     //list all task
@@ -156,9 +177,10 @@ public class Toothless {
     //get by
     public static String extractBy(String reply){
         int byIndex = reply.indexOf("/by");
-        return reply.substring(byIndex + 3);
+        return reply.substring(byIndex + 4);
     }
 
+    //get from to
     public static String extractFromTo(String reply, String command){
         String output;
 
@@ -166,11 +188,11 @@ public class Toothless {
         int toIndex = reply.indexOf("/to");
 
         if(command.equals("from")){
-            
+            output = reply.substring(fromIndex + 6,toIndex - 1);
         }else{
-
+            output = reply.substring(toIndex + 4);
         }
 
-        return "";
+        return output;
     }
 }

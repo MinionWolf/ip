@@ -1,3 +1,5 @@
+package command;
+
 public class ToDo extends Task{
 
     private boolean toDoStatus;

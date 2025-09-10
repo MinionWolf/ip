@@ -1,3 +1,5 @@
+package command;
+
 public class Deadlines extends Task{
     private String by;
     private boolean deadlineStatus;

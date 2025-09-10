@@ -1,3 +1,5 @@
+package command;
+
 public class Task {
     protected String taskName;
     protected boolean markStatus;

@@ -1,3 +1,7 @@
+import command.Deadlines;
+import command.Events;
+import command.Task;
+import command.ToDo;
 import exceptions.Empty;
 import exceptions.InvalidCommand;
 import exceptions.OutOfBounds;

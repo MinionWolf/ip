@@ -134,7 +134,7 @@ public class Toothless {
         }
     }
 
-    //check whether accessing index out of bounds
+    //check whether input is accessing index out of bounds
     public static void checkOutOfBounds(int id){
         if(id > listCount){
             throw new OutOfBounds();

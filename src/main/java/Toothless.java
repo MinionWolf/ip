@@ -1,8 +1,6 @@
 import exceptions.Empty;
 import exceptions.InvalidCommand;
 import exceptions.OutOfBounds;
-
-import java.beans.ExceptionListener;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -193,7 +191,7 @@ public class Toothless {
 
     //get task name
     public static String extractTaskName(String reply, String command){
-        String taskName = "";
+        String taskName;
         int spaceIndex;
 
         if(command.equals("todo")){

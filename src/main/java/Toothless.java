@@ -1,3 +1,8 @@
+import exceptions.Empty;
+import exceptions.InvalidCommand;
+import exceptions.OutOfBounds;
+
+import java.beans.ExceptionListener;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -32,7 +37,20 @@ public class Toothless {
         String reply = input.nextLine();
 
         while(!reply.equals("bye")){
-            checkOperation(reply);
+            try{
+                checkOperation(reply);
+            }
+            catch(Empty e) {
+                System.out.println("Please fill in a task \n");
+            }catch(InvalidCommand e){
+                System.out.println("Please enter a valid entry or command \n");
+            }catch(OutOfBounds e) {
+                System.out.println("The task does not exist \n");
+            }
+            catch(NumberFormatException e) {
+                System.out.println("Please enter a numeric value \n");
+            }
+
             reply = input.nextLine();
         }
 
@@ -47,28 +65,34 @@ public class Toothless {
         String operation = tempArray[0];
 
         if(operation.equals("mark")){
+            checkArrayLengthException(tempArray);
             listIndex = Integer.parseInt(tempArray[1]);
+            checkOutOfBounds(listIndex);
             markStatus(operation,listIndex);
         }else if(operation.equals("unmark")){
             listIndex = Integer.parseInt(tempArray[1]);
+            checkOutOfBounds(listIndex);
             markStatus(operation,listIndex);
         }else if(operation.equals("list")){
             getList();
         }else if(operation.equals("todo")){
+            checkArrayLengthException(tempArray);
             taskName = extractTaskName(reply,operation);
             addToDo(taskName);
         }else if(operation.equals("deadline")){
+            checkArrayLengthException(tempArray);
             taskName = extractTaskName(reply,operation);
             String by = extractBy(reply);
             addDeadline(taskName,by);
         }else if(operation.equals("event")){
+            checkArrayLengthException(tempArray);
             taskName = extractTaskName(reply,operation);
             String from = extractFromTo(reply,"from");
             String to = extractFromTo(reply,"to");
             addEvent(taskName,from,to);
         }
         else{
-            System.out.println("You have entered a wrong entry or command \n");
+            throw new InvalidCommand();
         }
     }
 
@@ -103,6 +127,20 @@ public class Toothless {
         System.out.println("[" + e.getEventStatus() + "]" + "[" + e.getMarkStatus() + "] " + e.getTaskName() + "(from: " + e.getFrom() + " to: " + e.getTo()  + ") \n" +
                 "Now you have " + listCount + " tasks in the list.");
         printBorder();
+    }
+
+    //checks array length for exception
+    public static void checkArrayLengthException(String[] array){
+        if(array.length == 1){
+            throw new Empty();
+        }
+    }
+
+    //check whether accessing index out of bounds
+    public static void checkOutOfBounds(int id){
+        if(id > listCount){
+            throw new OutOfBounds();
+        }
     }
 
     //list all task
@@ -155,7 +193,7 @@ public class Toothless {
 
     //get task name
     public static String extractTaskName(String reply, String command){
-        String taskName;
+        String taskName = "";
         int spaceIndex;
 
         if(command.equals("todo")){
@@ -165,10 +203,12 @@ public class Toothless {
             spaceIndex = reply.indexOf(" ");
             int byIndex = reply.indexOf("/by");
             taskName = reply.substring(spaceIndex + 1,byIndex);
-        }else{
+        }else if(command.equals("event")){
             spaceIndex = reply.indexOf(" ");
             int byIndex = reply.indexOf("/from");
             taskName = reply.substring(spaceIndex + 1,byIndex);
+        }else{
+            throw new InvalidCommand();
         }
 
         return taskName;

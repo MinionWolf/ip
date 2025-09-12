@@ -136,7 +136,7 @@ public class Toothless {
         printBorder();
     }
 
-    //checks array length for exception
+    //check array length for exception
     public static void checkArrayLengthException(String[] array){
         if(array.length == 1){
             throw new Empty();

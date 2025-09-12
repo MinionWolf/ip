@@ -1,2 +1,60 @@
+--------------------------------
+Hello I'm Toothless
+What can I do for you?
+--------------------------------
 
-
+Commands List
+--------------------------------
+list - to list all tasks added
+bye - to exit CLI
+mark [num] eg. mark 1
+unmark [num] eg.unmark 2
+todo [task name] eg. todo go run
+deadline [task name] /by [deadline date/time] eg. deadline pay loan /by 01/01/25
+event [task name] /from [start date/time] /to [end date/time] eg. attend conference /from Monday 1pm /to Friday 9pm
+--------------------------------
+--------------------------------
+Got it. I've added this task:
+[D][ ] read book (by: sunday)
+Now you have 1 tasks in the list.
+--------------------------------
+--------------------------------
+Got it. I've added this task:
+[E][ ] game (from: 5pm to: 8pm)
+Now you have 2 tasks in the list.
+--------------------------------
+--------------------------------
+Here are the tasks in your list:
+1. [D] [ ] read book
+2. [E] [ ] game
+--------------------------------
+--------------------------------
+Nice! I've marked this task as done:
+[X] read book
+--------------------------------
+--------------------------------
+Nice! I've marked this task as done:
+[X] game
+--------------------------------
+--------------------------------
+OK, I've marked this task as not done yet:
+[ ] read book
+--------------------------------
+--------------------------------
+Here are the tasks in your list:
+1. [D] [ ] read book
+2. [E] [X] game
+--------------------------------
+Please enter a valid entry or command
+Please fill in a task
+Please fill in a task
+Please double check the format of the command again
+Please double check the format of the command again
+Please double check the format of the command again
+Your command is uncomplete, check again
+Your command is uncomplete, check again
+Please double check the format of the command again
+Your command is uncomplete, check again
+--------------------------------
+Bye. Hope to see you again soon!
+--------------------------------

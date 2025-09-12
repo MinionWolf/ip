@@ -2,9 +2,8 @@ import command.Deadlines;
 import command.Events;
 import command.Task;
 import command.ToDo;
-import exceptions.Empty;
-import exceptions.InvalidCommand;
-import exceptions.OutOfBounds;
+import exceptions.*;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -13,21 +12,21 @@ public class Toothless {
     private static Task[] list = new Task[100];
 
     private static final String logo = "--------------------------------\n" +
-            "Hello I'm Toothless \n" + "What can I do for you? \n" +
-            "-------------------------------- \n";
+            "Hello I'm Toothless\n" + "What can I do for you?\n" +
+            "--------------------------------\n";
 
-    private static final String commands =  "Commands List \n" + "--------------------------------\n" +
-            "list - to list all tasks added \n" +
-            "bye - to exit CLI \n" +
-            "mark [num] eg. mark 1 \n" +
-            "unmark [num] eg.unmark 2 \n" +
-            "todo [task name] eg. todo go run \n" +
+    private static final String commands =  "Commands List\n" + "--------------------------------\n" +
+            "list - to list all tasks added\n" +
+            "bye - to exit CLI\n" +
+            "mark [num] eg. mark 1\n" +
+            "unmark [num] eg.unmark 2\n" +
+            "todo [task name] eg. todo go run\n" +
             "deadline [task name] /by [deadline date/time] eg. deadline pay loan /by 01/01/25\n" +
-            "event [task name] /from [start date/time] /to [end date/time] eg. attend conference /from Monday 1pm /to Friday 9pm \n" +
+            "event [task name] /from [start date/time] /to [end date/time] eg. attend conference /from Monday 1pm /to Friday 9pm\n" +
             "--------------------------------";
 
     private static final String bye = "--------------------------------\n" +
-                    "Bye. Hope to see you again soon! \n" +
+                    "Bye. Hope to see you again soon!\n" +
                     "--------------------------------" ;
 
     public static void main(String[] args) {
@@ -43,14 +42,18 @@ public class Toothless {
                 checkOperation(reply);
             }
             catch(Empty e) {
-                System.out.println("Please fill in a task \n");
+                System.out.println("Please fill in a task");
             }catch(InvalidCommand e){
-                System.out.println("Please enter a valid entry or command \n");
+                System.out.println("Please enter a valid entry or command");
             }catch(OutOfBounds e) {
-                System.out.println("The task does not exist \n");
+                System.out.println("The task does not exist");
             }
             catch(NumberFormatException e) {
-                System.out.println("Please enter a numeric value \n");
+                System.out.println("Please enter a numeric value");
+            }catch(WrongFormat e) {
+                System.out.println("Please double check the format of the command again");
+            }catch(IncompleteFormat e) {
+                System.out.println("Your command is uncomplete, check again");
             }
 
             reply = input.nextLine();
@@ -83,11 +86,13 @@ public class Toothless {
             addToDo(taskName);
         }else if(operation.equals("deadline")){
             checkArrayLengthException(tempArray);
+            checkContainByFromTo(reply,operation);
             taskName = extractTaskName(reply,operation);
             String by = extractBy(reply);
             addDeadline(taskName,by);
         }else if(operation.equals("event")){
             checkArrayLengthException(tempArray);
+            checkContainByFromTo(reply,operation);
             taskName = extractTaskName(reply,operation);
             String from = extractFromTo(reply,"from");
             String to = extractFromTo(reply,"to");
@@ -115,7 +120,7 @@ public class Toothless {
         list[listCount] = d;
         listCount++;
         printTopMessage("deadline");
-        System.out.println("[" + d.getDeadlineStatus() + "]" + "[" + d.getMarkStatus() + "] " + d.getTaskName() + "(by: " + d.getBy() + ") \n" +
+        System.out.println("[" + d.getDeadlineStatus() + "]" + "[" + d.getMarkStatus() + "] " + d.getTaskName() + " (by: " + d.getBy() + ")\n" +
                 "Now you have " + listCount + " tasks in the list.");
         printBorder();
     }
@@ -126,7 +131,7 @@ public class Toothless {
         list[listCount] = e;
         listCount++;
         printTopMessage("event");
-        System.out.println("[" + e.getEventStatus() + "]" + "[" + e.getMarkStatus() + "] " + e.getTaskName() + "(from: " + e.getFrom() + " to: " + e.getTo()  + ") \n" +
+        System.out.println("[" + e.getEventStatus() + "]" + "[" + e.getMarkStatus() + "] " + e.getTaskName() + " (from: " + e.getFrom() + " to: " + e.getTo()  + ")\n" +
                 "Now you have " + listCount + " tasks in the list.");
         printBorder();
     }
@@ -142,6 +147,23 @@ public class Toothless {
     public static void checkOutOfBounds(int id){
         if(id > listCount){
             throw new OutOfBounds();
+        }
+    }
+
+    //checks whether it contains by,from,to
+    public static void checkContainByFromTo(String reply, String operation){
+        if(operation.equals("deadline") && !reply.contains("/by")){
+            throw new WrongFormat();
+        }
+
+        if(operation.equals("event") && (!reply.contains("/from") || !reply.contains("/to"))){
+            throw new WrongFormat();
+        }
+    }
+
+    public static void checkEmptyByFromTo(String reply){
+        if(reply.isEmpty()){
+            throw new IncompleteFormat();
         }
     }
 
@@ -196,19 +218,18 @@ public class Toothless {
     //get task name
     public static String extractTaskName(String reply, String command){
         String taskName;
-        int spaceIndex;
 
         if(command.equals("todo")){
-            spaceIndex = reply.indexOf(" ");
-            taskName = reply.substring(spaceIndex + 1);
+            reply = reply.substring(4);
+            taskName = reply.trim();
         }else if(command.equals("deadline")){
-            spaceIndex = reply.indexOf(" ");
             int byIndex = reply.indexOf("/by");
-            taskName = reply.substring(spaceIndex + 1,byIndex);
+            reply = reply.substring(8,byIndex);
+            taskName = reply.trim();
         }else if(command.equals("event")){
-            spaceIndex = reply.indexOf(" ");
             int byIndex = reply.indexOf("/from");
-            taskName = reply.substring(spaceIndex + 1,byIndex);
+            reply = reply.substring(6,byIndex);
+            taskName = reply.trim();
         }else{
             throw new InvalidCommand();
         }
@@ -219,22 +240,22 @@ public class Toothless {
     //get by
     public static String extractBy(String reply){
         int byIndex = reply.indexOf("/by");
-        return reply.substring(byIndex + 4);
+        reply = reply.substring(byIndex + 3);
+        checkEmptyByFromTo(reply);
+        return reply.trim();
     }
 
     //get from to
     public static String extractFromTo(String reply, String command){
-        String output;
-
         int fromIndex = reply.indexOf("/from");
         int toIndex = reply.indexOf("/to");
 
         if(command.equals("from")){
-            output = reply.substring(fromIndex + 6,toIndex - 1);
+            reply = reply.substring(fromIndex + 5,toIndex);
         }else{
-            output = reply.substring(toIndex + 4);
+            reply = reply.substring(toIndex + 3);
         }
-
-        return output;
+        checkEmptyByFromTo(reply);
+        return reply.trim();
     }
 }

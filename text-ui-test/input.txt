@@ -1,0 +1,18 @@
+deadline read book /by sunday
+event game /from 5pm /to 8pm
+list
+mark 1
+mark 2
+unmark 1
+list
+blah
+deadline
+event
+deadline read book by sun
+event read book from sun
+event read book /from sun to mon
+deadline read book /by
+event read book /from /to
+event read book /from
+event read book /from sun /to
+bye

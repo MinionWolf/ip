@@ -28,39 +28,6 @@ public class Toothless {
                     "Bye. Hope to see you again soon!\n" +
                     "--------------------------------" ;
 
-    public static void main(String[] args) {
-        System.out.println(logo);
-        System.out.println(commands);
-
-        Scanner input = new Scanner(System.in);
-
-        String reply = input.nextLine();
-
-        while(!reply.equals("bye")){
-            try{
-                checkOperation(reply);
-            }
-            catch(Empty e) {
-                System.out.println("Please fill in a task");
-            }catch(InvalidCommand e){
-                System.out.println("Please enter a valid entry or command");
-            }catch(OutOfBounds e) {
-                System.out.println("The task does not exist");
-            }
-            catch(NumberFormatException e) {
-                System.out.println("Please enter a numeric value");
-            }catch(WrongFormat e) {
-                System.out.println("Please double check the format of the command again");
-            }catch(IncompleteFormat e) {
-                System.out.println("Your command is uncomplete, check again");
-            }
-
-            reply = input.nextLine();
-        }
-
-        System.out.println(bye);
-    }
-
     //checking the CLI command
     public static void checkOperation(String reply){
         int listIndex;
@@ -77,7 +44,12 @@ public class Toothless {
             listIndex = Integer.parseInt(tempArray[1]);
             checkOutOfBounds(listIndex);
             markStatus(operation,listIndex);
-        }else if(operation.equals("list")){
+        }else if(operation.equals("delete")){
+            listIndex = Integer.parseInt(tempArray[1]);
+            checkOutOfBounds(listIndex);
+            deleteTask(listIndex);
+        }
+        else if(operation.equals("list")){
             getList();
         }else if(operation.equals("todo")){
             checkArrayLengthException(tempArray);
@@ -177,6 +149,17 @@ public class Toothless {
         printBorder();
     }
 
+    public static void deleteTask(int index){
+        index -= 1;
+        printTopMessage("delete");
+
+        System.out.println(tasks.get(index).getTask() + "\n" + "Now you have " + (tasks.size() - 1) + " tasks in the list." );
+
+        printBorder();
+
+        tasks.remove(index);
+    }
+
     //marking or unmarking the task
     public static void markStatus(String mark, int listIndex){
         if(mark.equals("mark")){
@@ -202,7 +185,10 @@ public class Toothless {
             System.out.println("Nice! I've marked this task as done:");
         }else if(command.equals("unmark")){
             System.out.println("OK, I've marked this task as not done yet:");
-        }else{
+        }else if(command.equals("delete")){
+            System.out.println("Noted I've removed this task:");
+        }
+        else{
             System.out.println("Got it. I've added this task:");
         }
     }
@@ -254,5 +240,38 @@ public class Toothless {
         }
         checkEmptyByFromTo(reply);
         return reply.trim();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(logo);
+        System.out.println(commands);
+
+        Scanner input = new Scanner(System.in);
+
+        String reply = input.nextLine();
+
+        while(!reply.equals("bye")){
+            try{
+                checkOperation(reply);
+            }
+            catch(Empty e) {
+                System.out.println("Please fill in a task");
+            }catch(InvalidCommand e){
+                System.out.println("Please enter a valid entry or command");
+            }catch(OutOfBounds e) {
+                System.out.println("The task does not exist");
+            }
+            catch(NumberFormatException e) {
+                System.out.println("Please enter a numeric value");
+            }catch(WrongFormat e) {
+                System.out.println("Please double check the format of the command again");
+            }catch(IncompleteFormat e) {
+                System.out.println("Your command is uncomplete, check again");
+            }
+
+            reply = input.nextLine();
+        }
+
+        System.out.println(bye);
     }
 }

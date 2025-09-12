@@ -5,12 +5,9 @@ import command.ToDo;
 import exceptions.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Toothless {
-    private static int listCount = 0;
-    private static Task[] list = new Task[100];
     private static ArrayList<Task> tasks = new ArrayList<Task>();
 
     private static final String logo = "--------------------------------\n" +

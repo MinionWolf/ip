@@ -4,12 +4,14 @@ import command.Task;
 import command.ToDo;
 import exceptions.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Toothless {
     private static int listCount = 0;
     private static Task[] list = new Task[100];
+    private static ArrayList<Task> tasks = new ArrayList<Task>();
 
     private static final String logo = "--------------------------------\n" +
             "Hello I'm Toothless\n" + "What can I do for you?\n" +
@@ -106,33 +108,30 @@ public class Toothless {
     //add task to list
     public static void addToDo(String taskName){
         ToDo td = new ToDo(taskName);
-        list[listCount] = td;
-        listCount++;
+        tasks.add(td);
         printTopMessage("todo");
         System.out.println("[" + td.getToDoStatus() + "]" + "[" + td.getMarkStatus() + "] " + td.getTaskName() + "\n" +
-                "Now you have " + listCount + " tasks in the list.");
+                "Now you have " + tasks.size() + " tasks in the list.");
         printBorder();
     }
 
     //add deadline to list
     public static void addDeadline(String taskName, String by){
         Deadlines d = new Deadlines(taskName, by);
-        list[listCount] = d;
-        listCount++;
+        tasks.add(d);
         printTopMessage("deadline");
         System.out.println("[" + d.getDeadlineStatus() + "]" + "[" + d.getMarkStatus() + "] " + d.getTaskName() + " (by: " + d.getBy() + ")\n" +
-                "Now you have " + listCount + " tasks in the list.");
+                "Now you have " + tasks.size() + " tasks in the list.");
         printBorder();
     }
 
     //add event to list
     public static void addEvent(String taskName, String from, String to){
         Events e = new Events(taskName, from, to);
-        list[listCount] = e;
-        listCount++;
+        tasks.add(e);
         printTopMessage("event");
         System.out.println("[" + e.getEventStatus() + "]" + "[" + e.getMarkStatus() + "] " + e.getTaskName() + " (from: " + e.getFrom() + " to: " + e.getTo()  + ")\n" +
-                "Now you have " + listCount + " tasks in the list.");
+                "Now you have " + tasks.size() + " tasks in the list.");
         printBorder();
     }
 
@@ -145,7 +144,7 @@ public class Toothless {
 
     //check whether input is accessing index out of bounds
     public static void checkOutOfBounds(int id){
-        if(id > listCount){
+        if(id > tasks.size()){
             throw new OutOfBounds();
         }
     }
@@ -169,12 +168,13 @@ public class Toothless {
 
     //list all task
     public static void getList(){
-        list = Arrays.copyOf(list, listCount);
-
         printTopMessage("list");
 
-        for(int i = 0; i < list.length; i++){
-            System.out.println((i+1) + ". " + list[i].getTask());
+        int count = 1;
+
+        for(Task t : tasks){
+            System.out.println(count + ". " + t.getTask());
+            count++;
         }
 
         printBorder();
@@ -183,13 +183,13 @@ public class Toothless {
     //marking or unmarking the task
     public static void markStatus(String mark, int listIndex){
         if(mark.equals("mark")){
-            list[listIndex-1].setMarkStatus(true);
+            tasks.get(listIndex-1).setMarkStatus(true);
             printTopMessage("mark");
-            System.out.println("[" + list[listIndex-1].getMarkStatus() + "] " + list[listIndex-1].getTaskName());
+            System.out.println("[" + tasks.get(listIndex-1).getMarkStatus() + "] " + tasks.get(listIndex-1).getTaskName());
         }else{
-            list[listIndex-1].setMarkStatus(false);
+            tasks.get(listIndex-1).setMarkStatus(false);
             printTopMessage("unmark");
-            System.out.println("[" + list[listIndex-1].getMarkStatus() + "] " + list[listIndex-1].getTaskName());
+            System.out.println("[" + tasks.get(listIndex-1).getMarkStatus() + "] " + tasks.get(listIndex-1).getTaskName());
         }
 
         printBorder();

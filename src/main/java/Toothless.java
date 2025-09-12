@@ -29,7 +29,7 @@ public class Toothless {
                     "--------------------------------" ;
 
     //checking the CLI command
-    public static void checkOperation(String reply){
+    private static void checkOperation(String reply){
         int listIndex;
         String taskName;
         String[] tempArray = reply.split(" ");
@@ -75,7 +75,7 @@ public class Toothless {
     }
 
     //add task to list
-    public static void addToDo(String taskName){
+    private static void addToDo(String taskName){
         ToDo td = new ToDo(taskName);
         tasks.add(td);
         printTopMessage("todo");
@@ -85,7 +85,7 @@ public class Toothless {
     }
 
     //add deadline to list
-    public static void addDeadline(String taskName, String by){
+    private static void addDeadline(String taskName, String by){
         Deadlines d = new Deadlines(taskName, by);
         tasks.add(d);
         printTopMessage("deadline");
@@ -95,7 +95,7 @@ public class Toothless {
     }
 
     //add event to list
-    public static void addEvent(String taskName, String from, String to){
+    private static void addEvent(String taskName, String from, String to){
         Events e = new Events(taskName, from, to);
         tasks.add(e);
         printTopMessage("event");
@@ -105,21 +105,21 @@ public class Toothless {
     }
 
     //check array length for exception
-    public static void checkArrayLengthException(String[] array){
+    private static void checkArrayLengthException(String[] array){
         if(array.length == 1){
             throw new Empty();
         }
     }
 
     //check whether input is accessing index out of bounds
-    public static void checkOutOfBounds(int id){
+    private static void checkOutOfBounds(int id){
         if(id > tasks.size()){
             throw new OutOfBounds();
         }
     }
 
     //checks whether it contains by,from,to
-    public static void checkContainByFromTo(String reply, String operation){
+    private static void checkContainByFromTo(String reply, String operation){
         if(operation.equals("deadline") && !reply.contains("/by")){
             throw new WrongFormat();
         }
@@ -129,14 +129,14 @@ public class Toothless {
         }
     }
 
-    public static void checkEmptyByFromTo(String reply){
+    private static void checkEmptyByFromTo(String reply){
         if(reply.isEmpty()){
             throw new IncompleteFormat();
         }
     }
 
     //list all task
-    public static void getList(){
+    private static void getList(){
         printTopMessage("list");
 
         int count = 1;
@@ -149,7 +149,7 @@ public class Toothless {
         printBorder();
     }
 
-    public static void deleteTask(int index){
+    private static void deleteTask(int index){
         index -= 1;
         printTopMessage("delete");
 
@@ -161,7 +161,7 @@ public class Toothless {
     }
 
     //marking or unmarking the task
-    public static void markStatus(String mark, int listIndex){
+    private static void markStatus(String mark, int listIndex){
         if(mark.equals("mark")){
             tasks.get(listIndex-1).setMarkStatus(true);
             printTopMessage("mark");
@@ -176,7 +176,7 @@ public class Toothless {
     }
 
     //print header message
-    public static void printTopMessage(String command){
+    private static void printTopMessage(String command){
         printBorder();
 
         if(command.equals("list")){
@@ -194,12 +194,12 @@ public class Toothless {
     }
 
     //print line border
-    public static void printBorder(){
+    private static void printBorder(){
         System.out.println("--------------------------------");
     }
 
     //get task name
-    public static String extractTaskName(String reply, String command){
+    private static String extractTaskName(String reply, String command){
         String taskName;
 
         if(command.equals("todo")){
@@ -221,7 +221,7 @@ public class Toothless {
     }
 
     //get by
-    public static String extractBy(String reply){
+    private static String extractBy(String reply){
         int byIndex = reply.indexOf("/by");
         reply = reply.substring(byIndex + 3);
         checkEmptyByFromTo(reply);
@@ -229,7 +229,7 @@ public class Toothless {
     }
 
     //get from to
-    public static String extractFromTo(String reply, String command){
+    private static String extractFromTo(String reply, String command){
         int fromIndex = reply.indexOf("/from");
         int toIndex = reply.indexOf("/to");
 

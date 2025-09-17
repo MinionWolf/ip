@@ -36,14 +36,15 @@ public class Toothless {
         System.out.println(logo);
         System.out.println(commands);
 
-        String filePath = "~/ip/data";
+        String filePath = "data/data.txt";
+
         File f = new File(filePath);
 
-        try{
-            writeToFile(filePath,"testing");
-        }catch(IOException e){
-            System.out.println("Unable to write to file");
-        }
+//        try{
+//            writeToFile(filePath,"testing");
+//        }catch(IOException e){
+//            System.out.println("Unable to write to file");
+//        }
 
         Scanner input = new Scanner(System.in);
 
@@ -275,24 +276,25 @@ public class Toothless {
 
     private static void writeToFile(String filePath, String textToAdd) throws IOException {
         FileWriter fw = new FileWriter(filePath);
-        fw.write(textToAdd);
+        fw.write(textToAdd + "\n");
         fw.close();
     }
 
     private static void appendToFile(String filePath, String textToAppend) throws IOException {
         FileWriter fw = new FileWriter(filePath, true);
-        fw.write(textToAppend);
+        fw.write(textToAppend + "\n");
         fw.close();
     }
 
     private static void fillFile(String filePath){
+        list = Arrays.copyOf(list, listCount);
+
         for(Task t : list){
             try{
-                appendToFile(filePath, t.getTask());
+                writeToFile(filePath,t.getTask());
             }catch(IOException e){
-                System.out.println("Unable to write to file");
+                System.out.println("Unable to append");
             }
-
         }
     }
 }

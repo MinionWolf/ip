@@ -45,6 +45,15 @@ Here are the tasks in your list:
 1. [D] [ ] read book
 2. [E] [X] game
 --------------------------------
+--------------------------------
+Noted I've removed this task:
+[D] [ ] read book
+Now you have 1 tasks in the list.
+--------------------------------
+--------------------------------
+Here are the tasks in your list:
+1. [E] [X] game
+--------------------------------
 Please enter a valid entry or command
 Please fill in a task
 Please fill in a task

@@ -5,6 +5,9 @@ import command.ToDo;
 import exceptions.*;
 
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Toothless {
@@ -273,5 +276,27 @@ public class Toothless {
         }
 
         System.out.println(bye);
+    }
+
+    private static void writeToFile(String filePath, String textToAdd) throws IOException {
+        FileWriter fw = new FileWriter(filePath);
+        fw.write(textToAdd + "\n");
+        fw.close();
+    }
+
+    private static void appendToFile(String filePath, String textToAppend) throws IOException {
+        FileWriter fw = new FileWriter(filePath, true);
+        fw.write(textToAppend + "\n");
+        fw.close();
+    }
+
+    private static void fillFile(String filePath){
+        for(Task t : tasks){
+            try{
+                writeToFile(filePath,t.getTask());
+            }catch(IOException e){
+                System.out.println("Unable to append");
+            }
+        }
     }
 }

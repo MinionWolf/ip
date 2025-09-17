@@ -39,6 +39,6 @@ public class Events extends Task {
 
     @Override
     public String getTask(){
-        return "[" + getEventStatus() + "] " +  super.getTask();
+        return "[" + getEventStatus() + "] " +  super.getTask() + " (from: " + getFrom() + " to: " + getTo()  + ")";
     }
 }

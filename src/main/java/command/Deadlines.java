@@ -28,6 +28,6 @@ public class Deadlines extends Task{
 
     @Override
     public String getTask(){
-        return "[" + getDeadlineStatus() + "] " +  super.getTask();
+        return "[" + getDeadlineStatus() + "] " +  super.getTask() + " (by: " + getBy() + ")";
     }
 }

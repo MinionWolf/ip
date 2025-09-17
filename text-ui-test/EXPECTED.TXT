@@ -25,8 +25,8 @@ Now you have 2 tasks in the list.
 --------------------------------
 --------------------------------
 Here are the tasks in your list:
-1. [D] [ ] read book
-2. [E] [ ] game
+1. [D] [ ] read book (by: sunday)
+2. [E] [ ] game (from: 5pm to: 8pm)
 --------------------------------
 --------------------------------
 Nice! I've marked this task as done:
@@ -42,17 +42,17 @@ OK, I've marked this task as not done yet:
 --------------------------------
 --------------------------------
 Here are the tasks in your list:
-1. [D] [ ] read book
-2. [E] [X] game
+1. [D] [ ] read book (by: sunday)
+2. [E] [X] game (from: 5pm to: 8pm)
 --------------------------------
 --------------------------------
 Noted I've removed this task:
-[D] [ ] read book
+[D] [ ] read book (by: sunday)
 Now you have 1 tasks in the list.
 --------------------------------
 --------------------------------
 Here are the tasks in your list:
-1. [E] [X] game
+1. [E] [X] game (from: 5pm to: 8pm)
 --------------------------------
 Please enter a valid entry or command
 Please fill in a task

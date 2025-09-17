@@ -249,7 +249,7 @@ public class Toothless {
         System.out.println(logo);
         System.out.println(commands);
 
-        String filePath = "/data/data.txt";
+        String filePath = "data/data.txt";
 
         File f = new File(filePath);
 
@@ -299,7 +299,7 @@ public class Toothless {
     private static void fillFile(String filePath){
         for(Task t : tasks){
             try{
-                writeToFile(filePath,t.getTask());
+                appendToFile(filePath,t.getTask());
             }catch(IOException e){
                 System.out.println("Unable to append");
             }

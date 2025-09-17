@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Toothless {
-    private static ArrayList<Task> tasks = new ArrayList<Task>();
+    private static ArrayList<Task> tasks = new ArrayList<>();
 
     private static final String logo = "--------------------------------\n" +
             "Hello I'm Toothless\n" + "What can I do for you?\n" +

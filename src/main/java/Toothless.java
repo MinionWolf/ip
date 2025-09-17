@@ -249,6 +249,10 @@ public class Toothless {
         System.out.println(logo);
         System.out.println(commands);
 
+        String filePath = "/data/data.txt";
+
+        File f = new File(filePath);
+
         Scanner input = new Scanner(System.in);
 
         String reply = input.nextLine();
@@ -274,6 +278,8 @@ public class Toothless {
 
             reply = input.nextLine();
         }
+
+        fillFile(filePath);
 
         System.out.println(bye);
     }

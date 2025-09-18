@@ -1,6 +1,6 @@
 package command;
 
-public class Deadlines extends Task{
+public class Deadlines extends ToDo{
     private String by;
     private boolean deadlineStatus;
 
@@ -18,7 +18,8 @@ public class Deadlines extends Task{
         this.by = by;
     }
 
-    public String getDeadlineStatus() {
+    @Override
+    public String getType() {
         return (deadlineStatus ? "D" : " ");
     }
 
@@ -28,6 +29,6 @@ public class Deadlines extends Task{
 
     @Override
     public String getTask(){
-        return "[" + getDeadlineStatus() + "] " +  super.getTask() + " (by: " + getBy() + ")";
+        return super.getTask() + " (by: " + getBy() + ")";
     }
 }

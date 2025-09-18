@@ -4,6 +4,7 @@ import command.Task;
 import command.ToDo;
 import exceptions.*;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
@@ -55,17 +56,14 @@ public class Toothless {
         else if(operation.equals("list")){
             getList();
         }else if(operation.equals("todo")){
-            checkArrayLengthException(tempArray);
             taskName = extractTaskName(reply,operation);
             addToDo(taskName);
         }else if(operation.equals("deadline")){
-            checkArrayLengthException(tempArray);
             checkContainByFromTo(reply,operation);
             taskName = extractTaskName(reply,operation);
             String by = extractBy(reply);
             addDeadline(taskName,by);
         }else if(operation.equals("event")){
-            checkArrayLengthException(tempArray);
             checkContainByFromTo(reply,operation);
             taskName = extractTaskName(reply,operation);
             String from = extractFromTo(reply,"from");
@@ -82,7 +80,7 @@ public class Toothless {
         ToDo td = new ToDo(taskName);
         tasks.add(td);
         printTopMessage("todo");
-        System.out.println("[" + td.getToDoStatus() + "]" + "[" + td.getMarkStatus() + "] " + td.getTaskName() + "\n" +
+        System.out.println("[" + td.getType() + "]" + "[" + td.getMarkStatus() + "] " + td.getTaskName() + "\n" +
                 "Now you have " + tasks.size() + " tasks in the list.");
         printBorder();
     }
@@ -92,7 +90,7 @@ public class Toothless {
         Deadlines d = new Deadlines(taskName, by);
         tasks.add(d);
         printTopMessage("deadline");
-        System.out.println("[" + d.getDeadlineStatus() + "]" + "[" + d.getMarkStatus() + "] " + d.getTaskName() + " (by: " + d.getBy() + ")\n" +
+        System.out.println("[" + d.getType() + "]" + "[" + d.getMarkStatus() + "] " + d.getTaskName() + " (by: " + d.getBy() + ")\n" +
                 "Now you have " + tasks.size() + " tasks in the list.");
         printBorder();
     }
@@ -102,7 +100,7 @@ public class Toothless {
         Events e = new Events(taskName, from, to);
         tasks.add(e);
         printTopMessage("event");
-        System.out.println("[" + e.getEventStatus() + "]" + "[" + e.getMarkStatus() + "] " + e.getTaskName() + " (from: " + e.getFrom() + " to: " + e.getTo()  + ")\n" +
+        System.out.println("[" + e.getType() + "]" + "[" + e.getMarkStatus() + "] " + e.getTaskName() + " (from: " + e.getFrom() + " to: " + e.getTo()  + ")\n" +
                 "Now you have " + tasks.size() + " tasks in the list.");
         printBorder();
     }
@@ -220,15 +218,19 @@ public class Toothless {
             throw new InvalidCommand();
         }
 
+        if(taskName.isEmpty()){
+            throw new Empty();
+        }
+
         return taskName;
     }
 
     //get by
     private static String extractBy(String reply){
         int byIndex = reply.indexOf("/by");
-        reply = reply.substring(byIndex + 3);
+        reply = reply.substring(byIndex + 3).trim();
         checkEmptyByFromTo(reply);
-        return reply.trim();
+        return reply;
     }
 
     //get from to
@@ -237,33 +239,85 @@ public class Toothless {
         int toIndex = reply.indexOf("/to");
 
         if(command.equals("from")){
-            reply = reply.substring(fromIndex + 5,toIndex);
+            reply = reply.substring(fromIndex + 5,toIndex).trim();
         }else{
-            reply = reply.substring(toIndex + 3);
+            reply = reply.substring(toIndex + 3).trim();
         }
+
         checkEmptyByFromTo(reply);
-        return reply.trim();
+
+        return reply;
     }
 
-    private static void writeToFile(String filePath, String textToAdd) throws IOException {
-        FileWriter fw = new FileWriter(filePath);
-        fw.write(textToAdd + "\n");
+    //write content to file
+    private static void writeToFile(File f, String textToAdd) throws IOException {
+        FileWriter fw = new FileWriter(f);
+        fw.write(textToAdd);
         fw.close();
     }
 
     private static void appendToFile(String filePath, String textToAppend) throws IOException {
         FileWriter fw = new FileWriter(filePath, true);
-        fw.write(textToAppend + "\n");
+        fw.write(textToAppend);
         fw.close();
     }
 
-    private static void fillFile(String filePath){
-        for(Task t : tasks){
-            try{
-                appendToFile(filePath,t.getTask());
-            }catch(IOException e){
-                System.out.println("Unable to append");
+    //get all the content in the file
+    private static void getFileContents(File f) throws FileNotFoundException {
+        Scanner s = new Scanner(f);
+
+        int lineCounter = 1;
+
+        while (s.hasNext()) {
+            String line = s.nextLine();
+
+            int bar1Index = line.indexOf("|");
+            int bar2Index = line.lastIndexOf("|");
+
+            String type = line.substring(0, bar1Index).trim();
+            String mark = line.substring(bar2Index + 1, bar2Index + 3).trim();
+            String taskName = line.substring(bar1Index + 1, bar2Index).trim();
+
+            if(type.equals("T")){
+                addToDo(taskName);
+            }else if(type.equals("D")){
+                String by = extractBy(line);
+                addDeadline(taskName, by);
+            }else{
+                String from = extractFromTo(line, "from");
+                String to = extractFromTo(line, "to");
+
+                addEvent(taskName,from,to);
             }
+
+            if(mark.equals("X")){
+                markStatus("mark", lineCounter);
+            }
+
+            lineCounter++;
+        }
+    }
+
+    //Format string to export to file
+    private static void exportToFile(File f) {
+        String fileContent = "";
+
+        for(Task t : tasks){
+            fileContent += t.getType() + " | " + t.getTaskName() + " | " + t.getMarkStatus();
+
+            if(t.getType().equals("D")){
+                fileContent +=  "/by " + t.getBy() + "\n";
+            }else if(t.getType().equals("E")){
+                fileContent += "/from " + t.getFrom() + " /to " + t.getTo() + "\n";
+            }else{
+                fileContent += "\n";
+            }
+        }
+
+        try{
+            writeToFile(f, fileContent);
+        }catch(IOException e){
+            System.out.println("Error while writing to file");
         }
     }
 
@@ -271,9 +325,15 @@ public class Toothless {
         System.out.println(logo);
         System.out.println(commands);
 
-        String filePath = "data/data.txt";
+        File f = new File("./data/data.txt");
 
-        File f = new File(filePath);
+        if(f.length() != 0){
+            try{
+                getFileContents(f);
+            }catch(FileNotFoundException e){
+                System.out.println("Unable to retrieve file contents");
+            }
+        }
 
         Scanner input = new Scanner(System.in);
 
@@ -301,7 +361,7 @@ public class Toothless {
             reply = input.nextLine();
         }
 
-        fillFile(filePath);
+        exportToFile(f);
 
         System.out.println(bye);
     }

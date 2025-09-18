@@ -1,6 +1,6 @@
 package command;
 
-public class Task {
+public abstract class Task {
     protected String taskName;
     protected boolean markStatus;
 
@@ -28,4 +28,12 @@ public class Task {
     public String getTask(){
         return "[" + getMarkStatus() + "] " +  getTaskName();
     }
+
+    public abstract String getType();
+
+    public abstract String getBy();
+
+    public abstract String getFrom();
+
+    public abstract String getTo();
 }

@@ -1,6 +1,6 @@
 package command;
 
-public class Events extends Task {
+public class Events extends ToDo {
     private String from;
     private String to;
     private boolean eventStatus;
@@ -29,7 +29,8 @@ public class Events extends Task {
         this.from = from;
     }
 
-    public String getEventStatus() {
+    @Override
+    public String getType() {
         return (eventStatus ? "E" : " ");
     }
 
@@ -39,6 +40,6 @@ public class Events extends Task {
 
     @Override
     public String getTask(){
-        return "[" + getEventStatus() + "] " +  super.getTask() + " (from: " + getFrom() + " to: " + getTo()  + ")";
+        return super.getTask() + " (from: " + getFrom() + " to: " + getTo()  + ")";
     }
 }

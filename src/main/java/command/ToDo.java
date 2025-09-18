@@ -9,7 +9,7 @@ public class ToDo extends Task{
         this.toDoStatus = true;
     }
 
-    public String getToDoStatus() {
+    public String getType() {
         return (toDoStatus ? "T" : " ");
     }
 
@@ -19,8 +19,22 @@ public class ToDo extends Task{
 
     @Override
     public String getTask(){
-        return "[" + getToDoStatus() + "] " +  super.getTask();
+        return "[" + getType() + "] " +  super.getTask();
     }
 
+    @Override
+    public String getFrom(){
+        return "";
+    };
+
+    @Override
+    public String getTo(){
+        return "";
+    };
+
+    @Override
+    public String getBy(){
+        return "";
+    };
 
 }

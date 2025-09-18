@@ -245,6 +245,28 @@ public class Toothless {
         return reply.trim();
     }
 
+    private static void writeToFile(String filePath, String textToAdd) throws IOException {
+        FileWriter fw = new FileWriter(filePath);
+        fw.write(textToAdd + "\n");
+        fw.close();
+    }
+
+    private static void appendToFile(String filePath, String textToAppend) throws IOException {
+        FileWriter fw = new FileWriter(filePath, true);
+        fw.write(textToAppend + "\n");
+        fw.close();
+    }
+
+    private static void fillFile(String filePath){
+        for(Task t : tasks){
+            try{
+                appendToFile(filePath,t.getTask());
+            }catch(IOException e){
+                System.out.println("Unable to append");
+            }
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println(logo);
         System.out.println(commands);
@@ -282,27 +304,5 @@ public class Toothless {
         fillFile(filePath);
 
         System.out.println(bye);
-    }
-
-    private static void writeToFile(String filePath, String textToAdd) throws IOException {
-        FileWriter fw = new FileWriter(filePath);
-        fw.write(textToAdd + "\n");
-        fw.close();
-    }
-
-    private static void appendToFile(String filePath, String textToAppend) throws IOException {
-        FileWriter fw = new FileWriter(filePath, true);
-        fw.write(textToAppend + "\n");
-        fw.close();
-    }
-
-    private static void fillFile(String filePath){
-        for(Task t : tasks){
-            try{
-                appendToFile(filePath,t.getTask());
-            }catch(IOException e){
-                System.out.println("Unable to append");
-            }
-        }
     }
 }
